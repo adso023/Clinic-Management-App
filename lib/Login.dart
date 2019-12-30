@@ -62,6 +62,7 @@ class _LoginState extends State<Login>{
                 Container(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    key: Key('txtUsername'),
                     controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: 'Username',

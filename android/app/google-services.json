@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "302648244415",
+    "firebase_url": "https://clinic-2706a.firebaseio.com",
+    "project_id": "clinic-2706a",
+    "storage_bucket": "clinic-2706a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302648244415:android:94a92455d91bed704e6e0a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_clinic_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302648244415-d96kq8ksr2ukopgobmmlnojtg8q0l6kt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSpWQkl1JkK4S5GSn5vqqnIPRolLF6YLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302648244415-d96kq8ksr2ukopgobmmlnojtg8q0l6kt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

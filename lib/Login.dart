@@ -30,12 +30,14 @@ class _LoginState extends State<Login>{
   bool _isLoading;
 
   FirebaseAuth _auth;
+  Firestore _firestore;
 
   @override
   void initState() {
     super.initState();
 
     _auth = FirebaseAuth.instance;
+    _firestore = Firestore.instance;
 
     _usernameController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
@@ -126,40 +128,56 @@ class _LoginState extends State<Login>{
 
                       if(authUsername == "Admin@clinic.domain.com" && authPassword == "5T5ptQ"){
 
-                        _auth.signInAnonymously().then((onValue) {
-                          
-                          Navigator.pop(context);
-                          Navigator.push(context, SlideRightRoute(page: AdminWelcome()));
-
+                        _auth.signInWithEmailAndPassword(email: authUsername, password: authPassword)
+                        .then((onValue){
+                          print(onValue.user.uid);
+                          setState(() {_isLoading=false;});
                         }).catchError((onError){
+                          print('Sign in Failed');
                           print(onError.toString());
+                          setState(() {_isLoading=false;});
                         });
 
                       }else{
 
                         print(authUsername); print(authPassword);
 
-                      _auth.signInWithEmailAndPassword(email: authUsername, password: authPassword)
-                      .then((onValue) {
-                        print('Sign in Successful');
-                        setState(() {_isLoading = false;});
+                        _auth.signInWithEmailAndPassword(email: authUsername, password: authPassword)
+                        .then((onValue) {
+                          print('Sign in Successful');
+                          setState(() {_isLoading = false;});
 
-                      }).catchError((onError){
-                        print('Sign in Failed');
-                        setState(() {_isLoading = false;});
+                          Future.wait([
+                            _firestore.collection('Employee').getDocuments(),
+                            _firestore.collection('Patient').getDocuments(),
+                          ]).then((onValue){
+                            List<DocumentSnapshot> empSnapshots = onValue[0].documents;
+                            List<DocumentSnapshot> patSnapshots = onValue[1].documents;
 
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          style: AlertStyle(
-                            animationDuration: Duration(milliseconds: 500),
-                            animationType: AnimationType.grow,
-                          ),
-                          title: 'Sign in Failed',
-                          desc: 'Username or Password is incorrect'
-                        ).show();
+                            
 
-                      });
+                          }).catchError((onError) => print(onError.toString()));
+
+                        }).catchError((onError) async{
+                          print('Line 162 - ${onError.toString()}');
+                          print('Line 163 - Sign in Failed');
+                          setState(() {_isLoading = false;});
+
+                          await Alert(
+                            context: context,
+                            type: AlertType.error,
+                            style: AlertStyle(
+                              animationDuration: Duration(milliseconds: 500),
+                              animationType: AnimationType.grow,
+                            ),
+                            title: 'Sign in Failed',
+                            desc: 'Username or Password is incorrect'
+                          ).show();
+
+                          _usernameController.clear();
+                          _passwordController.clear();
+
+                        });
 
                       }
 
@@ -187,7 +205,14 @@ class _LoginState extends State<Login>{
                       MaterialButton(
                         color: Colors.black26,
                         child: Icon(Icons.settings),
-                        onPressed: () => print('Settings'),
+                        onPressed: () async{
+                          
+                          await Alert(
+                            context: context,
+                            type: AlertType.info,
+                            title: 'Function not implemented yet'
+                          ).show();
+                        },
                       )
                     ],
                   ),

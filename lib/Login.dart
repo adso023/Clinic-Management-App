@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_clinic_app/SignUp.dart';
+import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Login extends StatefulWidget{
@@ -98,17 +100,17 @@ class _LoginState extends State<Login>{
                   margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 5.0),
                   child: (! _isLoading) ? MaterialButton(
                     color: Colors.teal,
-                    child: Text('Login'),
+                    child: Text('Login', style: TextStyle(letterSpacing: 1.2, fontSize: 20.0),),
                     onPressed: () {
 
                       setState(() {_isLoading = true;});
 
-                      String auth_username = _usernameController.text + "@clinic.domain.com";
-                      String auth_password = _passwordController.text;
+                      String authUsername = _usernameController.text + "@clinic.domain.com";
+                      String authPassword = _passwordController.text;
 
-                      print(auth_username); print(auth_password);
+                      print(authUsername); print(authPassword);
 
-                      _auth.signInWithEmailAndPassword(email: auth_username, password: auth_password)
+                      _auth.signInWithEmailAndPassword(email: authUsername, password: authPassword)
                       .then((onValue) {
                         print('Sign in Successful');
                         setState(() {_isLoading = false;});
@@ -143,10 +145,9 @@ class _LoginState extends State<Login>{
                   alignment: Alignment.center,
                   child: ButtonBar(
                     children: <Widget>[
-                      MaterialButton(
-                        color: Colors.teal[300],
-                        child: Text('Create Account'),
-                        onPressed: () => print('Create Account'),
+                      FlatButton(
+                        child: Text('Create Account', style: TextStyle(letterSpacing: 1.2, fontSize: 18.0),),
+                        onPressed: () => Navigator.push(context, ScaleRoute(page: CreateAccount())),
                       ),
 
                       MaterialButton(

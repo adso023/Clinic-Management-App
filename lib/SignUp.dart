@@ -55,6 +55,7 @@ class _CreateAccountState extends State<CreateAccount>{
       key: _scaffoldState,
       body: SafeArea(
         child: WillPopScope(
+          onWillPop: () async => false,
           child: Form(
             key: _formKey,
             child: ListView(
@@ -168,6 +169,12 @@ class _CreateAccountState extends State<CreateAccount>{
 
                         _auth.createUserWithEmailAndPassword(email: authUsername, password: authPassword)
                         .then((onValue) {
+
+                          UserUpdateInfo update = UserUpdateInfo();
+                          update.displayName = authFirstname + " " + authLastname;
+
+                          onValue.user.updateProfile(update).then((onValue) => print('User Updated'));
+                          
                           _firestore.collection(_accountType).document(onValue.user.uid).setData({
                             'First Name' : authFirstname,
                             'Last Name' : authLastname,
@@ -176,6 +183,13 @@ class _CreateAccountState extends State<CreateAccount>{
                           }).then((onValue){
 
                             setState(() {_isLoading = false;});
+
+                            _auth.signOut();
+
+                            Alert(
+                              context: context,
+                              title: 'Create User Successful',
+                            ).show();
 
                             Navigator.pop(context);
 
@@ -228,13 +242,16 @@ class _CreateAccountState extends State<CreateAccount>{
                     alignment: Alignment.center,
                     child: FlatButton(
                       child: Text('Already Have an Account - Log in Here!', style: TextStyle(fontSize: 18.0, letterSpacing: 0.6),),
-                      onPressed: () => Navigator.pop(context)
+                      onPressed: () {
+                         Navigator.pop(context);
+                         Navigator.push(context, ScaleRoute(page: Login()));
+                      },
                     ),
                   )
 
               ],
             ),
-          ), onWillPop: () async => false,
+          ),
         ),
       ),
     );

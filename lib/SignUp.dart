@@ -50,6 +50,22 @@ class _CreateAccountState extends State<CreateAccount>{
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _accountType = null;
+    _firstName.dispose();
+    _lastName.dispose();
+    _username.dispose();
+    _password.dispose();
+
+    _isLoading = null; _viewHide = null;
+    _auth.signOut();
+    _auth = null;
+    _firestore = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldState,

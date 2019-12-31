@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/SignUp.dart';
+import 'package:flutter_clinic_app/admin/AdminPage.dart';
 import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
+import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Login extends StatefulWidget{
@@ -45,6 +47,20 @@ class _LoginState extends State<Login>{
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _usernameController.dispose();
+    _passwordController.dispose();
+
+    _formKey = null; _scaffoldState = null;
+
+    _usernameError = null; _passwordError = null;
+    _viewHide = null; _isLoading = null;
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldState,
@@ -56,7 +72,7 @@ class _LoginState extends State<Login>{
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  constraints: BoxConstraints(minWidth: 30.0, maxWidth: 500.0, minHeight: 40.0, maxHeight: 150.0),
+                  constraints: BoxConstraints(minWidth: 30.0, maxWidth: 500.0, minHeight: 40.0, maxHeight: 100.0),
                   child: Image.asset("assets/images/ClinicLogo.png", fit: BoxFit.contain,),
                   margin: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 30.0),
                 ),
@@ -108,7 +124,20 @@ class _LoginState extends State<Login>{
                       String authUsername = _usernameController.text + "@clinic.domain.com";
                       String authPassword = _passwordController.text;
 
-                      print(authUsername); print(authPassword);
+                      if(authUsername == "Admin@clinic.domain.com" && authPassword == "5T5ptQ"){
+
+                        _auth.signInAnonymously().then((onValue) {
+                          
+                          Navigator.pop(context);
+                          Navigator.push(context, SlideRightRoute(page: AdminWelcome()));
+
+                        }).catchError((onError){
+                          print(onError.toString());
+                        });
+
+                      }else{
+
+                        print(authUsername); print(authPassword);
 
                       _auth.signInWithEmailAndPassword(email: authUsername, password: authPassword)
                       .then((onValue) {
@@ -132,6 +161,8 @@ class _LoginState extends State<Login>{
 
                       });
 
+                      }
+
                     },
                   ) : CircularProgressIndicator() ,
                 ),
@@ -147,7 +178,10 @@ class _LoginState extends State<Login>{
                     children: <Widget>[
                       FlatButton(
                         child: Text('Create Account', style: TextStyle(letterSpacing: 1.2, fontSize: 18.0),),
-                        onPressed: () => Navigator.push(context, ScaleRoute(page: CreateAccount())),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, ScaleRoute(page: CreateAccount()));
+                        },
                       ),
 
                       MaterialButton(

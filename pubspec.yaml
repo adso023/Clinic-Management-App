@@ -50,6 +50,10 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/images/ClinicLogo.png
+    - assets/images/BlankImage.png
+    - assets/images/DoctorIcon.png
+    - assets/images/NurseIcon.png
+    - assets/images/PharmacyIcon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

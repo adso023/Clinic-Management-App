@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/Login.dart';
+import 'package:flutter_clinic_app/admin/AdminServices.dart';
+import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
+import 'package:flutter_clinic_app/transitions/SizeRoute.dart';
 import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class AdminWelcome extends StatefulWidget{
 
@@ -68,7 +72,9 @@ class _AdminWelcome extends State<AdminWelcome>{
                       alignment: Alignment.center,
                       child: MaterialButton(
                         child: Text('Manage Services'),
-                        onPressed: () => print('Manage Services'),
+                        onPressed: () {
+                          Navigator.push(context, SizeRoute(page: ManageServices()));
+                        },
                         color: Colors.teal[500],
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
@@ -81,10 +87,30 @@ class _AdminWelcome extends State<AdminWelcome>{
                 width: MediaQuery.of(context).size.width,
                 child: MaterialButton(
                   child: Text('Log out'),
-                  onPressed: () {
-                    _auth.signOut();
-                    Navigator.pop(context);
-                    Navigator.push(context, SlideLeftRoute(page: Login()));
+                  onPressed: () async {
+
+                    await Alert(
+                      context: context,
+                      type: AlertType.warning,
+                      title: 'Confirmation',
+                      desc: 'Do you want to log out',
+                      buttons: [
+                        DialogButton(
+                          child: Text('Log out', style: TextStyle(color: Colors.black),),
+                          onPressed: (){
+                            _auth.signOut();
+
+                            Navigator.pop(context);
+                            Navigator.push(context, SlideLeftRoute(page: Login()));
+                          },
+                        ),
+                        DialogButton(
+                          child: Text('Stay', style: TextStyle(color: Colors.black),),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      ]
+                    ).show();
+
                   },
                   color: Colors.red[300],
                   height: 50.0,

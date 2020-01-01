@@ -132,6 +132,10 @@ class _LoginState extends State<Login>{
                         .then((onValue){
                           print(onValue.user.uid);
                           setState(() {_isLoading=false;});
+
+                          Navigator.pop(context);
+                          Navigator.push(context, SlideRightRoute(page: AdminWelcome()));
+
                         }).catchError((onError){
                           print('Sign in Failed');
                           print(onError.toString());

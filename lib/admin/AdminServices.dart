@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clinic_app/admin/NewService.dart';
 import 'package:flutter_clinic_app/models/Services.dart';
-import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ManageServices extends StatefulWidget{
 
@@ -68,26 +67,16 @@ class _ManageServices extends State<ManageServices>{
         child: Icon(Icons.add),
         onPressed: () {
 
-          
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return NewService();
+            }
+          );
 
         },
       ),
     );
-  }
-}
-
-class _NewServices extends StatefulWidget{
-
-  @override
-  State<StatefulWidget> createState() {
-    return _NewServicesState();
-  }
-}
-
-class _NewServicesState extends State<_NewServices>{
-
-  @override
-  Widget build(BuildContext context) {
-    return null;
   }
 }

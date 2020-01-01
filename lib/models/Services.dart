@@ -12,6 +12,10 @@ class Services {
     'Pharmacy' : Image.asset('assets/images/PharmacyIcon.png', fit: BoxFit.contain,),
   };
 
+  factory Services.fromMap({Map<String, dynamic> json}) => Services(role: json['role'], service: json['service'], rate: json['rate']);
+
+  Map<String, dynamic> toMap() => {'role' : this.roleName, 'service': this.serviceName, 'rate' : this.serviceRate};
+
   Services({
     this.role,
     this.service,
@@ -21,6 +25,7 @@ class Services {
   }
 
   Image get image => _image;
+  String get roleName => this.role;
   String get serviceName => this.service;
   double get serviceRate => this.rate;
 }

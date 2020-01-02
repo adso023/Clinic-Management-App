@@ -12,7 +12,7 @@ class Services {
     'Pharmacy' : Image.asset('assets/images/PharmacyIcon.png', fit: BoxFit.contain,),
   };
 
-  factory Services.fromMap({Map<String, dynamic> json}) => Services(role: json['role'], service: json['service'], rate: json['rate']);
+  factory Services.fromMap({Map<String, dynamic> json}) => Services(role: json['role'], service: json['service'], rate: double.parse(json['rate'].toString()));
 
   Map<String, dynamic> toMap() => {'role' : this.roleName, 'service': this.serviceName, 'rate' : this.serviceRate};
 
@@ -28,4 +28,9 @@ class Services {
   String get roleName => this.role;
   String get serviceName => this.service;
   double get serviceRate => this.rate;
+
+  @override
+  String toString() {
+    return "Services (role=$role, service=$service, rate=$rate)";
+  }
 }

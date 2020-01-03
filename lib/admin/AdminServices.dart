@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_clinic_app/admin/NewService.dart';
+import 'package:flutter_clinic_app/admin/ServiceOptions.dart';
 import 'package:flutter_clinic_app/models/Services.dart';
 
 class ManageServices extends StatefulWidget{
@@ -39,6 +39,8 @@ class _ManageServices extends State<ManageServices>{
           stream: _firestore.collection('Service').snapshots(),
           builder: (context, snapshot){
 
+            if(! snapshot.hasData) return Center(child: CircularProgressIndicator(),);
+
             List<DocumentSnapshot> documents = <DocumentSnapshot>[];
 
             for(DocumentSnapshot snapshot in snapshot.data.documents){
@@ -67,6 +69,13 @@ class _ManageServices extends State<ManageServices>{
                             leading: services.image,
                             title: Text(services.serviceName),
                             trailing: Text('\$${services.serviceRate}'),
+                            onLongPress: () async{
+                              await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => EditServices(services: services, documentId: docs.documentID,)
+                              );
+                            },
                           ),
                         );
 
@@ -76,21 +85,18 @@ class _ManageServices extends State<ManageServices>{
               ],
             );
 
-            //return Container();
-
           },
         )
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: 'Add New Service',
         child: Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
 
-          return showDialog(
+          await showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) {
-              return NewService();
-            }
+            builder: (context) => NewService()
           );
 
         },

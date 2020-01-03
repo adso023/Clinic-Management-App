@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_clinic_app/admin/NewService.dart';
 import 'package:flutter_clinic_app/models/Services.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class ManageServices extends StatefulWidget{
 
@@ -40,43 +39,44 @@ class _ManageServices extends State<ManageServices>{
           stream: _firestore.collection('Service').snapshots(),
           builder: (context, snapshot){
 
-            if(! snapshot.hasData){
-              return _buildEmpty(context);
+            List<DocumentSnapshot> documents = <DocumentSnapshot>[];
+
+            for(DocumentSnapshot snapshot in snapshot.data.documents){
+              if(snapshot.documentID != "AA") documents.add(snapshot);
             }
 
-            List<DocumentSnapshot> documents = snapshot.data.documents.map((documents){
-              if(documents.documentID != "AA") return documents;
-            }).toList();
-
-            documents.map((elements) => print(elements.data));
+            if( documents.isEmpty){
+              return _buildEmpty(context);
+            }
 
             return Column(
               children: <Widget>[
                 Container(
                   child: Text('Defined Services', style: TextStyle(letterSpacing: 1.2),),
                   alignment: Alignment.center,
+                  margin: const EdgeInsets.all(20.0),
                 ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                  child: ListView(
-                    children: documents.map((docs){
-                      final services = Services.fromMap(json: docs.data);
-                      print(services.toString());
+                Expanded(
+                    child: ListView(
+                      children: documents.map((docs){
+                        final services = Services.fromMap(json: docs.data);
+                        print(services.toString());
 
-                      return Container(
-                        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                        child: ListTile(
-                          leading: services.image,
-                          title: Text(services.serviceName),
-                          trailing: Text('\$${services.serviceRate}'),
-                        ),
-                      );
+                        return Container(
+                          child: ListTile(
+                            leading: services.image,
+                            title: Text(services.serviceName),
+                            trailing: Text('\$${services.serviceRate}'),
+                          ),
+                        );
 
-                    }).toList()
+                      }).toList()
+                    ),
                   ),
-                )
               ],
             );
+
+            //return Container();
 
           },
         )

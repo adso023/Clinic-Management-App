@@ -26,8 +26,11 @@ class Services {
 
   Image get image => _image;
   String get roleName => this.role;
+  set roleName(String value) { this.role = value; }
   String get serviceName => this.service;
+  set serviceName(String value) { this.service = value; }
   double get serviceRate => this.rate;
+  set serviceRate(double value) { this.rate = value; }
 
   @override
   String toString() {

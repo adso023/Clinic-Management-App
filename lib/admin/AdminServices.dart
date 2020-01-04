@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -54,7 +55,7 @@ class _ManageServices extends State<ManageServices>{
             return Column(
               children: <Widget>[
                 Container(
-                  child: Text('Defined Services', style: TextStyle(letterSpacing: 1.2),),
+                  child: Text('Defined Services', style: TextStyle(letterSpacing: 1.2, fontSize: 22.0),),
                   alignment: Alignment.center,
                   margin: const EdgeInsets.all(20.0),
                 ),
@@ -66,7 +67,7 @@ class _ManageServices extends State<ManageServices>{
 
                         return Container(
                           child: ListTile(
-                            leading: services.image,
+                            leading: services.icon,
                             title: Text(services.serviceName),
                             trailing: Text('\$${services.serviceRate}'),
                             onLongPress: () async{

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/Login.dart';
+import 'package:flutter_clinic_app/admin/AdminAccounts.dart';
 import 'package:flutter_clinic_app/admin/AdminServices.dart';
-import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
 import 'package:flutter_clinic_app/transitions/SizeRoute.dart';
 import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -63,7 +63,7 @@ class _AdminWelcome extends State<AdminWelcome>{
                       child: MaterialButton(
                         child: Text('Manage Accounts'),
                         color: Colors.teal[500],
-                        onPressed: () => print('Manage Accounts'),
+                        onPressed: () => Navigator.push(context, SizeRoute(page: ManageAccounts()))
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
                     ),
@@ -72,9 +72,7 @@ class _AdminWelcome extends State<AdminWelcome>{
                       alignment: Alignment.center,
                       child: MaterialButton(
                         child: Text('Manage Services'),
-                        onPressed: () {
-                          Navigator.push(context, SizeRoute(page: ManageServices()));
-                        },
+                        onPressed: () => Navigator.push(context, SizeRoute(page: ManageServices())),
                         color: Colors.teal[500],
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),

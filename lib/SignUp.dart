@@ -202,12 +202,7 @@ class _CreateAccountState extends State<CreateAccount>{
 
                             _auth.signOut();
 
-                            Alert(
-                              context: context,
-                              title: 'Create User Successful',
-                            ).show();
-
-                            Navigator.pop(context);
+                            Navigator.push(context, ScaleRoute(page: Login()));
 
                           }).catchError((onError) {
 

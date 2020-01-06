@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/Login.dart';
 import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class EmployeeWelcome extends StatefulWidget{
 
@@ -14,15 +16,34 @@ class EmployeeWelcome extends StatefulWidget{
 class _EmployeeWelcome extends State<EmployeeWelcome>{
 
   FirebaseAuth _auth;
-  FirebaseUser _user;
+  Future<FirebaseUser> _user;
+  Firestore _firestore;
+  String _name;
+  String _uid;
 
   @override
   void initState() {
     super.initState();
 
-    print(_auth.currentUser().then((onValue) => print(onValue.email)));
+    _auth = FirebaseAuth.instance;
+    getUserInformation();
+    _user = _auth.currentUser();
 
-    _user = _auth.currentUser().then((onValue) => onValue) as FirebaseUser;
+    _firestore = Firestore.instance;
+
+    print(_uid);
+
+    //_firestore.collection('Employee').document();
+
+    print("Employee Name $_name");
+  }
+
+  void getUserInformation() async {
+    await _auth.currentUser().then((onValue) {
+      print(onValue.email);
+      _name = onValue.displayName;
+      _uid = onValue.uid;
+    });
   }
 
   @override
@@ -34,6 +55,21 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
 
   @override
   Widget build(BuildContext context) {
+
+    _firestore.collection('Employee').document(_uid).get().then((onValue) {
+      final data = onValue.data;
+
+      if(! data.containsKey(['profile']) || data['profile'] == ""){
+        Alert(
+          context: context,
+          title: 'Profile Id does not exist',
+          desc: 'Click on Manage Profile to complete your profile'
+        ).show();
+      }
+    }).catchError((onError){
+      
+    });
+
     return Scaffold(
       body: SafeArea(
         child: WillPopScope(
@@ -47,21 +83,21 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
                       alignment: Alignment.center,
                       constraints: BoxConstraints(minWidth: 30.0, maxWidth: 500.0, minHeight: 40.0, maxHeight: 150.0),
                       child: Image.asset("assets/images/ClinicLogo.png", fit: BoxFit.contain,),
-                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 30.0),
+                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
                     ),
 
                     Container(
                       alignment: Alignment.center,
-                      child: Text('Welcome ${_user.displayName}\nSigned in as Employee'),
+                      child: Text('Welcome $_name\nSigned in as Employee', style: TextStyle(fontSize: 22.0),),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
                     ),
 
                     Container(
                       alignment: Alignment.center,
                       child: MaterialButton(
-                        child: Text('Manage Accounts'),
+                        child: Text('Manage Profile'),
                         color: Colors.teal[500],
-                        onPressed: () => print('Manage Accounts'),
+                        onPressed: () => print('Manage Profile'),
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
                     ),
@@ -69,8 +105,8 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
                     Container(
                       alignment: Alignment.center,
                       child: MaterialButton(
-                        child: Text('Manage Services'),
-                        onPressed: () => print('Manage Services'),
+                        child: Text('Manage Clinic Services'),
+                        onPressed: () => print('Manage Clinic Services'),
                         color: Colors.teal[500],
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
@@ -83,10 +119,28 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
                 width: MediaQuery.of(context).size.width,
                 child: MaterialButton(
                   child: Text('Log out'),
-                  onPressed: () {
-                    _auth.signOut();
-                    Navigator.pop(context);
-                    Navigator.push(context, SlideLeftRoute(page: Login()));
+                  onPressed: () async {
+                    await Alert(
+                      context: context,
+                      type: AlertType.warning,
+                      title: 'Confirmation',
+                      desc: 'Do you want to log out',
+                      buttons: [
+                        DialogButton(
+                          child: Text('Log out', style: TextStyle(color: Colors.black),),
+                          onPressed: (){
+                            _auth.signOut();
+
+                            Navigator.pop(context);
+                            Navigator.push(context, SlideLeftRoute(page: Login()));
+                          },
+                        ),
+                        DialogButton(
+                          child: Text('Stay', style: TextStyle(color: Colors.black),),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      ]
+                    ).show();
                   },
                   color: Colors.red[300],
                   height: 50.0,

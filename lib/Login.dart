@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/SignUp.dart';
 import 'package:flutter_clinic_app/admin/AdminPage.dart';
+import 'package:flutter_clinic_app/employee/EmployeePage.dart';
 import 'package:flutter_clinic_app/transitions/ScaleRoute.dart';
 import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -151,14 +152,34 @@ class _LoginState extends State<Login>{
                           print('Sign in Successful');
                           setState(() {_isLoading = false;});
 
+                          final user = onValue.user;
+
                           Future.wait([
                             _firestore.collection('Employee').getDocuments(),
                             _firestore.collection('Patient').getDocuments(),
                           ]).then((onValue){
                             List<DocumentSnapshot> empSnapshots = onValue[0].documents;
+
+                            //Search Employee
+                            empSnapshots.forEach((snapshot){
+                              if(snapshot.documentID == user.uid){
+                                print('${snapshot.documentID} == ${user.uid}');
+                                print('Found in Employee');
+
+                                Navigator.pop(context);
+                                Navigator.push(context, SlideRightRoute(page: EmployeeWelcome()));
+                              }
+                            });
+
                             List<DocumentSnapshot> patSnapshots = onValue[1].documents;
 
-                            
+                            //Search Patient
+                            patSnapshots.forEach((snapshot){
+                              if(snapshot.documentID == user.uid){
+                                print('${snapshot.documentID} == ${user.uid}');
+                                print('Found in Patient');
+                              }
+                            });
 
                           }).catchError((onError) => print(onError.toString()));
 

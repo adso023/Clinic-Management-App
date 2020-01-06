@@ -8,10 +8,10 @@ class Accounts {
   AccountType _accountType;
   String _documentID;
 
-  Accounts({String fname, String lname, String username, String password, String type, String id}) : 
-    _accountFName = fname, _accountLName = lname, _accountUsername = username, _accountPassword = password, _accountType = type == "employee" ? AccountType.employee : AccountType.patient, _documentID = id;
+  Accounts({String fname, String lname, String username, String password, AccountType type, String id}) : 
+    _accountFName = fname, _accountLName = lname, _accountUsername = username, _accountPassword = password, _accountType = type , _documentID = id;
 
-  factory Accounts.fromJson({Map<String, dynamic> json, String type, String id}) => 
+  factory Accounts.fromJson({Map<String, dynamic> json, AccountType type, String id}) => 
     Accounts(fname: json['First Name'], lname: json['Last Name'], username: json['Username'], password: json['Password'], type: type, id: id);
 
   String get accountFName => _accountFName;

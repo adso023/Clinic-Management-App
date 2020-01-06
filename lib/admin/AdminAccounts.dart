@@ -51,8 +51,7 @@ class _ManageAccounts extends State<ManageAccounts>{
                   return ListView(
                     shrinkWrap: true,
                     children: emp.map<Widget>((docs){
-                      final account = Accounts.fromJson(json: docs.data);
-                      account.accountType = AccountType.employee;
+                      final account = Accounts.fromJson(json: docs.data, type: AccountType.employee, id: docs.documentID);
 
                       return ListTile(
                         leading: Icon(MdiIcons.account),
@@ -82,8 +81,7 @@ class _ManageAccounts extends State<ManageAccounts>{
                   return ListView(
                     shrinkWrap: true,
                     children: pat.map<Widget>((docs){
-                      final account = Accounts.fromJson(json: docs.data);
-                      account.accountType = AccountType.patient;
+                      final account = Accounts.fromJson(json: docs.data, type: AccountType.patient, id: docs.documentID);
 
                       return ListTile(
                         leading: Icon(MdiIcons.account),

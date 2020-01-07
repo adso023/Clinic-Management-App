@@ -1,16 +1,24 @@
-# flutter_clinic_app
+# Clinic Management Application
+A Clinic Management Application made in the Flutter Framework and Dart Language
 
-A new Flutter project.
+## Sign Up - Account Creation
+- Users can create accounts - employee and patient account types
 
-## Getting Started
+## Account Types
+### Administrator Functions
+- Admin makes services that clinics can use
+- Admin can only delete accounts, not create or edit them
 
-This project is a starting point for a Flutter application.
+### Employee Functions
+- Employee's need to complete the clinic profile's to access other features - (Profile Completion Currently Not Implemented)
+- Employee's can set/edit working hours for their clinic's - (Working Hours Currently Not Implemented)
+- Employee's can set/edit services that the Admin defines - (Services Currently Not Implemented)
+- Employee's can manage appointments set by Patients - (Manage Appointments Currently Not Implemented)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Patient Functions
+- Patient's can set/delete appointments at clinic's - (Appointment Management Currently Not Implemented)
+- Patient's can search for clinic's by: (Search Functions Currently Not Implemented)
+  - Clinic Name
+  - Clinic Address/Postal Code
+  - Clinic Working Hours
+  - Clinic Services

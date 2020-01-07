@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clinic_app/Login.dart';
+import 'package:flutter_clinic_app/employee/EmployeeProfile.dart';
+import 'package:flutter_clinic_app/transitions/SizeRoute.dart';
 import 'package:flutter_clinic_app/transitions/SlideRoute.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -55,21 +57,6 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
 
   @override
   Widget build(BuildContext context) {
-
-    _firestore.collection('Employee').document(_uid).get().then((onValue) {
-      final data = onValue.data;
-
-      if(! data.containsKey(['profile']) || data['profile'] == ""){
-        Alert(
-          context: context,
-          title: 'Profile Id does not exist',
-          desc: 'Click on Manage Profile to complete your profile'
-        ).show();
-      }
-    }).catchError((onError){
-      
-    });
-
     return Scaffold(
       body: SafeArea(
         child: WillPopScope(
@@ -97,7 +84,10 @@ class _EmployeeWelcome extends State<EmployeeWelcome>{
                       child: MaterialButton(
                         child: Text('Manage Profile'),
                         color: Colors.teal[500],
-                        onPressed: () => print('Manage Profile'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(context, SizeRoute(page: EmployeeProfile()));
+                        },
                       ),
                       margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
                     ),
